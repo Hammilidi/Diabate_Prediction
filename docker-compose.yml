@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: yonlifidelis2@gmail.com         # ✅ même user que dans n8n
+      POSTGRES_PASSWORD: admin   # ✅ même mot de passe
+      POSTGRES_DB: reponses_n8n_db         # ✅ même nom de base que dans n8n
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  n8n:
+    image: n8nio/n8n:1.97.1
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: localhost
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: reponses_n8n_db        # ✅ même que postgres
+      DB_POSTGRESDB_USER: postgres              # ✅ même que postgres
+      DB_POSTGRESDB_PASSWORD: admin        # ✅ même que postgres
+      N8N_BASIC_AUTH_ACTIVE: true
+      N8N_BASIC_AUTH_USER: admin
+      N8N_BASIC_AUTH_PASSWORD: admin
+    depends_on:
+      - postgres
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
+  pg_data:
