@@ -1,3 +1,11 @@
+import joblib
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
+
+
+
+
+
 def optimize_best_model(best_model_name, trained_models, X_train, y_train):
     """
     MODULE 9: Optimise les hyperparamètres du meilleur modèle
@@ -79,7 +87,7 @@ def optimize_best_model(best_model_name, trained_models, X_train, y_train):
         'scaler': scaler_opt
     }
     
-    joblib.dump(optimized_model_data, f'models/optimized_{best_model_name.lower().replace(" ", "_")}_model.pkl')
+    joblib.dump(optimized_model_data, f'../models/optimized_{best_model_name.lower().replace(" ", "_")}_model.pkl')
     print(f"💾 Modèle optimisé sauvegardé dans models/")
     
     return grid_search.best_estimator_, scaler_opt

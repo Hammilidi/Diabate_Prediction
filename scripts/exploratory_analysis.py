@@ -1,3 +1,8 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
 def perform_eda(df):
     """
     MODULE 2: Effectue une analyse exploratoire complète des données
@@ -37,7 +42,7 @@ def perform_eda(df):
         fig.delaxes(axes[j])
     
     plt.tight_layout()
-    plt.savefig('plots/01_distributions_variables.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../plots/01_distributions_variables.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     # Matrice de corrélation
@@ -46,7 +51,7 @@ def perform_eda(df):
     sns.heatmap(correlation_matrix, annot=True, cmap='RdYlBu_r', center=0,
                 square=True, fmt='.3f')
     plt.title('Matrice de Corrélation des Variables')
-    plt.savefig('plots/02_correlation_matrix.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../plots/02_correlation_matrix.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     print("✅ Graphiques sauvegardés dans plots/")

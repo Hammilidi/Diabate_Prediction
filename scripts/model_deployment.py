@@ -1,3 +1,7 @@
+import joblib
+from datetime import datetime
+
+
 def save_final_model(best_model, scaler_clf, scaler_clustering, clustering_features, 
                     high_risk_cluster, best_model_name):
     """
@@ -22,7 +26,7 @@ def save_final_model(best_model, scaler_clf, scaler_clustering, clustering_featu
     }
     
     # Sauvegarde
-    joblib.dump(model_package, 'models/diabetes_risk_prediction_model_v1.0.pkl')
+    joblib.dump(model_package, '../models/diabetes_risk_prediction_model_v1.0.pkl')
     
     print("✅ Modèle final sauvegardé: models/diabetes_risk_prediction_model_v1.0.pkl")
     print(f"🎯 Modèle: {best_model_name}")

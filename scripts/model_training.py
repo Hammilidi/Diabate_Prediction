@@ -1,3 +1,15 @@
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import (classification_report, confusion_matrix, 
+                           accuracy_score, precision_score, recall_score, f1_score)
+from sklearn.model_selection import cross_val_score
+
+
+
+
 def train_classification_models(X_train, X_test, y_train, y_test):
     """
     MODULE 7: Entraîne et évalue plusieurs modèles de classification

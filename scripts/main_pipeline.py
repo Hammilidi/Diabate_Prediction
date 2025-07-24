@@ -1,3 +1,54 @@
+# ================================================================================================
+# IMPORTATION DES BIBLIOTHÈQUES
+# ================================================================================================
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+from scipy import stats
+import joblib
+from datetime import datetime
+
+# Machine Learning
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (classification_report, confusion_matrix, 
+                           accuracy_score, precision_score, recall_score, f1_score)
+from sklearn.metrics import silhouette_score
+
+
+# Gestion du déséquilibre des classes
+from imblearn.over_sampling import RandomOverSampler
+from imblearn.under_sampling import RandomUnderSampler
+
+# Importation des modules 
+from data_loading import load_and_explore_data
+from exploratory_analysis import perform_eda
+from data_preprocessing import preprocess_data
+from clustering_kmeans import perform_clustering
+from cluster_analysis import analyze_clusters
+from classification_preparation import prepare_classification_data
+from model_training import train_classification_models
+from model_evaluation import evaluate_models, plot_model_comparison, plot_radar_comparison, analyze_best_model, plot_enhanced_confusion_matrix, plot_roc_auc_curves, plot_precision_recall_curve, analyze_overfitting, plot_validation_curves, plot_learning_curves
+from hyperparameter_optimization import optimize_best_model
+from explainability import explain_model
+from model_deployment import save_final_model
+from prediction_function import predict_diabetes_risk
+
+
+# Configuration
+warnings.filterwarnings('ignore')
+plt.style.use('seaborn-v0_8')
+sns.set_palette("husl")
+
 
 def run_complete_pipeline(data_path='../data/diabete.csv'):
     """
@@ -38,8 +89,10 @@ def run_complete_pipeline(data_path='../data/diabete.csv'):
             X_train, X_test, y_train, y_test
         )
         
-        # MODULE 8: Évaluation
-        best_model_name, comparison_df = evaluate_models(model_results, y_test)
+        # MODULE 8: Évaluation - CORRECTION ICI
+        best_model_name, comparison_df = evaluate_models(
+            model_results, y_test, trained_models, X_train, y_train, X_test
+        )
         
         # MODULE 9: Optimisation
         optimized_model, scaler_opt = optimize_best_model(
@@ -73,6 +126,8 @@ def run_complete_pipeline(data_path='../data/diabete.csv'):
         
     except Exception as e:
         print(f"❌ ERREUR DANS LE PIPELINE: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 # ================================================================================================
@@ -95,17 +150,20 @@ def demo_prediction():
     
     for patient in patients:
         print(f"\n👤 {patient['name']}")
-        result = predict_diabetes_risk(
-            patient['glucose'], patient['bmi'], 
-            patient['age'], patient['pedigree']
-        )
-        
-        if 'error' not in result:
-            print(f"   🎯 Prédiction: {result['risk_level']}")
-            print(f"   📊 Confiance: {result['confidence']:.1f}%")
-            print(f"   🔴 Probabilité haut risque: {result['probability_high_risk']:.1f}%")
-        else:
-            print(f"   ❌ {result['error']}")
+        try:
+            result = predict_diabetes_risk(
+                patient['glucose'], patient['bmi'], 
+                patient['age'], patient['pedigree']
+            )
+            
+            if 'error' not in result:
+                print(f"   🎯 Prédiction: {result['risk_level']}")
+                print(f"   📊 Confiance: {result['confidence']:.1f}%")
+                print(f"   🔴 Probabilité haut risque: {result['probability_high_risk']:.1f}%")
+            else:
+                print(f"   ❌ {result['error']}")
+        except Exception as e:
+            print(f"   ❌ Erreur lors de la prédiction: {e}")
 
 # ================================================================================================
 # POINT D'ENTRÉE PRINCIPAL

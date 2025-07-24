@@ -1,3 +1,11 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import RandomOverSampler
+
+
+
+
 def prepare_classification_data(df_with_clusters, clustering_features):
     """
     MODULE 6: Prépare les données pour la classification supervisée

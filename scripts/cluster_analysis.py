@@ -1,3 +1,10 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+
+
 def analyze_clusters(df_processed, df_scaled, cluster_labels, clustering_features):
     """
     MODULE 5: Analyse et visualise les clusters obtenus
@@ -40,7 +47,7 @@ def analyze_clusters(df_processed, df_scaled, cluster_labels, clustering_feature
     plt.title('Visualisation des Clusters dans l\'Espace PCA')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig('plots/04_clusters_pca_visualization.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../plots/04_clusters_pca_visualization.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     # 5.2 Analyse des caractéristiques par cluster

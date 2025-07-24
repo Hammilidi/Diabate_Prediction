@@ -1,3 +1,10 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+
+
+
 def preprocess_data(df):
     """
     MODULE 3: Prétraite les données: gestion des valeurs manquantes, outliers, standardisation

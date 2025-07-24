@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def load_and_explore_data(file_path='../data/diabete.csv'):
     """
     MODULE 1: Charge et explore les données initiales du dataset diabète

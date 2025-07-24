@@ -1,3 +1,11 @@
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+import joblib
+import numpy as np
+
+
+
 def perform_clustering(df_scaled, max_clusters=10):
     """
     MODULE 4: Effectue le clustering K-Means avec détermination optimale de k
@@ -42,7 +50,7 @@ def perform_clustering(df_scaled, max_clusters=10):
     ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('plots/03_cluster_optimization.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../plots/03_cluster_optimization.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     # Détermination du k optimal
@@ -67,7 +75,7 @@ def perform_clustering(df_scaled, max_clusters=10):
         'kmeans_model': kmeans_final,
         'optimal_k': optimal_k_silhouette,
         'silhouette_score': max_silhouette
-    }, 'models/kmeans_clustering_model.pkl')
+    }, '../models/kmeans_clustering_model.pkl')
     
     print("💾 Modèle de clustering sauvegardé dans models/")
     

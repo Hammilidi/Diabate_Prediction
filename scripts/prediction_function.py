@@ -1,3 +1,6 @@
+import joblib
+import pandas as pd
+
 
 def predict_diabetes_risk(glucose, bmi, age, diabetes_pedigree, model_path=None):
     """
@@ -6,7 +9,7 @@ def predict_diabetes_risk(glucose, bmi, age, diabetes_pedigree, model_path=None)
     Cette fonction charge le modèle sauvegardé et effectue des prédictions.
     """
     if model_path is None:
-        model_path = 'models/diabetes_risk_prediction_model_v1.0.pkl'
+        model_path = '../models/diabetes_risk_prediction_model_v1.0.pkl'
     
     try:
         # Chargement du modèle
