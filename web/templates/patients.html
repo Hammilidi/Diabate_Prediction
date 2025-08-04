@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Patients - DiabetoWeb{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-users"></i> Gestion des Patients</h1>
+    <p>Liste complète de vos patients et leurs prédictions</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Liste des Patients</h2>
+        <a href="/add" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Nouveau Patient
+        </a>
+    </div>
+
+    {% if patients %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Âge</th>
+                    <th>Sexe</th>
+                    <th>Glucose</th>
+                    <th>BMI</th>
+                    <th>Tension</th>
+                    <th>Statut</th>
+                    <th>Risque</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td><strong>{{ patient.name }}</strong></td>
+                    <td>{{ patient.age }} ans</td>
+                    <td>{{ patient.sex }}</td>
+                    <td>{{ patient.glucose }}</td>
+                    <td>{{ patient.bmi }}</td>
+                    <td>{{ patient.bloodpressure }}</td>
+                    <td>
+                        {% if patient.result == 1 %}
+                        <span class="badge badge-danger">
+                            <i class="fas fa-exclamation-triangle"></i> Haut Risque
+                        </span>
+                        {% else %}
+                        <span class="badge badge-success">
+                            <i class="fas fa-check-circle"></i> Faible Risque
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if patient.risk_probability %}
+                        <div class="risk-indicator">
+                            {{ (patient.risk_probability * 100)|round(1) }}%
+                        </div>
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ patient.created_at.strftime('%d/%m/%Y') }}</td>
+                    <td>
+                        <a href="/delete/{{ patient.id }}" 
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirmDelete('{{ patient.name }}')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-user-friends" style="font-size: 4rem; color: #bdc3c7; margin-bottom: 1rem;"></i>
+        <h3>Aucun patient enregistré</h3>
+        <p>Commencez par ajouter votre premier patient</p>
+        <a href="/add" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Ajouter un Patient
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<a href="/add" class="floating-btn" title="Ajouter un patient">
+    <i class="fas fa-plus"></i>
+</a>
+
+<style>
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+.page-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+}
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+.empty-state h3 {
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+}
+.empty-state p {
+    color: #95a5a6;
+    margin-bottom: 2rem;
+}
+.risk-indicator {
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    background: linear-gradient(45deg, #f39c12, #f1c40f);
+    color: white;
+    display: inline-block;
+}
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+}
+</style>
+{% endblock %}

@@ -89,7 +89,7 @@ def run_complete_pipeline(data_path='../data/diabete.csv'):
             X_train, X_test, y_train, y_test
         )
         
-        # MODULE 8: Évaluation - CORRECTION ICI
+        # MODULE 8: Évaluation 
         best_model_name, comparison_df = evaluate_models(
             model_results, y_test, trained_models, X_train, y_train, X_test
         )

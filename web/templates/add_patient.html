@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter Patient - DiabetoWeb{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-user-plus"></i> Nouveau Patient</h1>
+    <p>Ajouter un nouveau patient et obtenir une prédiction de risque</p>
+</div>
+
+<div class="card">
+    {% if error %}
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    {% if success %}
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> {{ success }}
+    </div>
+    {% endif %}
+
+    {% if prediction %}
+    <div class="prediction-result">
+        <h3><i class="fas fa-brain"></i> Résultat de la Prédiction IA</h3>
+        <div class="prediction-card {{ 'high-risk' if prediction.prediction == 1 else 'low-risk' }}">
+            <div class="prediction-status">
+                {% if prediction.prediction == 1 %}
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="status-text">HAUT RISQUE</span>
+                {% else %}
+                <i class="fas fa-check-circle"></i>
+                <span class="status-text">FAIBLE RISQUE</span>
+                {% endif %}
+            </div>
+            <div class="prediction-details">
+                <div class="detail-item">
+                    <span class="label">Probabilité de haut risque:</span>
+                    <span class="value">{{ (prediction.probability_high_risk * 100)|round(1) }}%</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Probabilité de faible risque:</span>
+                    <span class="value">{{ (prediction.probability_low_risk * 100)|round(1) }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/submit" class="patient-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">
+                    <i class="fas fa-user"></i> Nom Complet
+                </label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="age">
+                    <i class="fas fa-birthday-cake"></i> Âge
+                </label>
+                <input type="number" id="age" name="age" class="form-control" min="1" max="120" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="sex">
+                    <i class="fas fa-venus-mars"></i> Sexe
+                </label>
+                <select id="sex" name="sex" class="form-control" required>
+                    <option value="">Sélectionner...</option>
+                    <option value="M">Masculin</option>
+                    <option value="F">Féminin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="glucose">
+                    <i class="fas fa-tint"></i> Glucose (mg/dL)
+                </label>
+                <input type="number" id="glucose" name="glucose" class="form-control" 
+                       min="0" max="500" step="0.1" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="bmi">
+                    <i class="fas fa-weight"></i> BMI (kg/m²)
+                </label>
+                <input type="number" id="bmi" name="bmi" class="form-control" 
+                       min="10" max="70" step="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="bloodpressure">
+                    <i class="fas fa-heartbeat"></i> Tension Artérielle (mmHg)
+                </label>
+                <input type="number" id="bloodpressure" name="bloodpressure" class="form-control" 
+                       min="50" max="250" step="1" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pedigree">
+                <i class="fas fa-dna"></i> Fonction Pedigree Diabète
+            </label>
+            <input type="number" id="pedigree" name="pedigree" class="form-control" 
+                   min="0" max="2" step="0.001" required>
+            <small class="form-text">Valeur entre 0 et 2 (historique familial de diabète)</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-brain"></i> Analyser et Prédire
+            </button>
+            <a href="/patients" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+.page-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #eee;
+}
+.prediction-result {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 15px;
+    border: 2px solid #dee2e6;
+}
+.prediction-result h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+.prediction-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.prediction-card.high-risk {
+    border-left: 5px solid #e74c3c;
+}
+.prediction-card.low-risk {
+    border-left: 5px solid #27ae60;
+}
+.prediction-status {
+    margin-bottom: 1.5rem;
+}
+.prediction-status i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.high-risk .prediction-status i {
+    color: #e74c3c;
+}
+.low-risk .prediction-status i {
+    color: #27ae60;
+}
+.status-text {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.high-risk .status-text {
+    color: #e74c3c;
+}
+.low-risk .status-text {
+    color: #27ae60;
+}
+.prediction-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.detail-item {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+.detail-item .label {
+    display: block;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+.detail-item .value {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+.btn-secondary {
+    background: linear-gradient(45deg, #95a5a6, #bdc3c7);
+    color: white;
+}
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(149, 165, 166, 0.3);
+}
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .prediction-details {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,34 @@
+erDiagram
+    MEDECINS ||--o{ PATIENTS : possède
+    PATIENTS ||--o{ PREDICTIONS : génère
+
+    MEDECINS {
+        int id PK
+        varchar username
+        varchar email
+        varchar password
+        timestamp created_at
+    }
+
+    PATIENTS {
+        int id PK
+        int doctorid FK
+        varchar name
+        int age
+        varchar sex
+        float glucose
+        float bmi
+        float bloodpressure
+        float pedigree
+        int result
+        float risk_probability
+        timestamp created_at
+    }
+
+    PREDICTIONS {
+        int id PK
+        int patientid FK
+        int result
+        float probability
+        timestamp created_at
+    }

@@ -1,0 +1,113 @@
+<!-- home.html -->
+{% extends "base.html" %}
+
+{% block title %}Accueil - DiabetoWeb{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-home"></i> Tableau de Bord</h1>
+    <p>Bienvenue Dr. {{ username }}, voici un aperçu de votre activité</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ total_patients }}</div>
+        <div class="stat-label">
+            <i class="fas fa-users"></i> Total Patients
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ diabetic_patients }}</div>
+        <div class="stat-label">
+            <i class="fas fa-exclamation-triangle"></i> Patients à Risque
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ diabetic_percentage }}%</div>
+        <div class="stat-label">
+            <i class="fas fa-chart-pie"></i> Pourcentage Risque
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2><i class="fas fa-clock"></i> Patients Récents</h2>
+    {% if recent_patients %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Âge</th>
+                    <th>Statut</th>
+                    <th>Risque</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in recent_patients %}
+                <tr>
+                    <td><strong>{{ patient.name }}</strong></td>
+                    <td>{{ patient.age }} ans</td>
+                    <td>
+                        {% if patient.result == 1 %}
+                        <span class="badge badge-danger">Haut Risque</span>
+                        {% else %}
+                        <span class="badge badge-success">Faible Risque</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if patient.risk_probability %}
+                        {{ (patient.risk_probability * 100)|round(1) }}%
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ patient.created_at.strftime('%d/%m/%Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Aucun patient enregistré pour le moment.</p>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/add" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Ajouter un Patient
+        </a>
+        <a href="/patients" class="btn btn-secondary" style="margin-left: 1rem;">
+            <i class="fas fa-list"></i> Voir Tous les Patients
+        </a>
+    </div>
+</div>
+
+<style>
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, #95a5a6, #bdc3c7);
+    color: white;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(149, 165, 166, 0.3);
+}
+</style>
+{% endblock %}

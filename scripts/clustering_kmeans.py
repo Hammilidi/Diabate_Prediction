@@ -21,7 +21,7 @@ def perform_clustering(df_scaled, max_clusters=10):
     
     inertias = []
     silhouette_scores = []
-    k_range = range(2, max_clusters + 1)  # Commencer à 2 pour la silhouette
+    k_range = range(2, max_clusters + 1)  
     
     for k in k_range:
         kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
